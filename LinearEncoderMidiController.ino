@@ -62,9 +62,8 @@ void setup()
   pinMode(encoder0PinB, INPUT);
   PastA = (boolean)digitalRead(encoder0PinA); //initial value of channel A;
   PastB = (boolean)digitalRead(encoder0PinB); //and channel B
-  //To speed up even more, you may define manually the ISRs
   // encoder A channel on interrupt 0 (Arduino's pin 2)
-  attachInterrupt(0, doEncoderA, RISING);
+  attachInterrupt(0, doEncoderA, FALLING);
   // encoder B channel pin on interrupt 1 (Arduino's pin 3)
   attachInterrupt(1, doEncoderB, CHANGE);
   
