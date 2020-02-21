@@ -3,8 +3,8 @@
 HIGH RESOLUTION LINEAR ENCODER AS A LARGE SLIDING MIDI CONTROLLER
  * Created: Jim Foster (feb, 2020) 
  * Purpose/ Intended functions;
-  * To read values a 5um TTL linear encoder and force sensitive resistor
-    to be translated into corresponding Midi values
+  * To read values from a 400mm TTL linear encoder with a resolution of 5um and a force sensitive resistor
+    to be translated into corresponding Midi data
  * Encoder; 
    * Position determines a value between 0-127 to be sent via CC1 (modulation) 
  * Fsr;
@@ -73,9 +73,13 @@ void setup()
 }
 
 void loop()
-{
-  //Read Fsr in & check state machine;  
-  sensorValue = analogRead(sensorPin);
+{ 
+  CCval = encoder0Pos/20; //Scale encoder pulses down to familiar range ( 0-1023)
+  CCval = CCval/8;       //Divide by 8 to get range within workale midi values (0-127) 
+  if (CCval != lastCCval) { //if interupt routine returns a scaled value greater than last value
+  MidiUSB.sendControlChange(1, CCval, MIDI_CHANNEL); //Send Midi
+  lastCCval = CCval; //Remember last value to be compared in next loop 
+  sensorValue = analogRead(sensorPin);  //Read Fsr in & check state machine;  
   stateMachine();   //not sure if this slows down interupts or vice versa?
   //Seems to work ok for now, need to implement a re-zero button or something 
   
@@ -113,11 +117,6 @@ void stateMachine() {
       if (millis() - atSendTime > AT_INTERVAL) {
         atVal = map(sensorValue, Threshold, 1023, 0, 127);
         MidiUSB.sendAfterTouch(atVal, MIDI_CHANNEL);
-           CCval = encoder0Pos/20;
-           CCval = CCval/8;
-           if (CCval != lastCCval) {
-        MidiUSB.sendControlChange(1, CCval, MIDI_CHANNEL);
-        CCval = lastCCval;
         atSendTime = millis();
         }
       }
