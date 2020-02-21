@@ -77,8 +77,9 @@ void loop()
   CCval = encoder0Pos/20; //Scale encoder pulses down to familiar range ( 0-1023)
   CCval = CCval/8;       //Divide by 8 to get range within workale midi values (0-127) 
   if (CCval != lastCCval) { //if interupt routine returns a scaled value greater than last value
-  MidiUSB.sendControlChange(1, CCval, MIDI_CHANNEL); //Send Midi
-  lastCCval = CCval; //Remember last value to be compared in next loop 
+   MidiUSB.sendControlChange(1, CCval, MIDI_CHANNEL); //Send Midi
+   lastCCval = CCval; //Remember last value to be compared in next loop 
+  }
   sensorValue = analogRead(sensorPin);  //Read Fsr in & check state machine;  
   stateMachine();   //not sure if this slows down interupts or vice versa?
   //Seems to work ok for now, need to implement a re-zero button or something 
