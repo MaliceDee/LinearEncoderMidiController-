@@ -1,3 +1,13 @@
+/*This reads A/B/Z channels from Vevor 400mm TTL optical linear encoder and scales it down to 
+a value between 0-127 to be sent via 5 din midi (not yet implemented) 
+This sketch only seems to work with my Arduino Uno, setting index on start doesn't work on my 32u4 boards 
+and only sends 0.0 to the Serial monitor. A work around for that might be changing the function to set index 
+when a button is pressed after startup, for now however I intend to interface this sketch 
+to send midi out via 5 din connection. 
+-Jim Foster
+-21/02/20
+*/ 
+
 #include <avr/interrupt.h>
 
 #define encoder0PinA  3            //Quadrature Track A
