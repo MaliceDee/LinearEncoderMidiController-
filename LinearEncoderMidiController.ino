@@ -119,7 +119,6 @@ void stateMachine() {
         atVal = map(sensorValue, Threshold, 1023, 0, 127);
         MidiUSB.sendAfterTouch(atVal, MIDI_CHANNEL);
         atSendTime = millis();
-        }
       }
     }
   }
