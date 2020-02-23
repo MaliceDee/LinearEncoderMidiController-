@@ -113,6 +113,7 @@ void stateMachine() {
   } else if (state == NOTE_ON) {
     if (sensorValue < Threshold) {
       MidiUSB.sendNoteOff(noteSounding, 100, MIDI_CHANNEL);  
+      MidiUSB.sendAfterTouch(0, MIDI_CHANNEL);
       state = NOTE_OFF;
     } else {
       if (millis() - atSendTime > AT_INTERVAL) {
